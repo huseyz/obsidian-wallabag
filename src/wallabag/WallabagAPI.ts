@@ -1,0 +1,123 @@
+import WallabagPlugin from 'main';
+import { request, requestUrl, RequestUrlResponse } from 'obsidian';
+import { Token } from './WallabagAuth';
+
+export interface WallabagArticle {
+  id: number,
+  tags: string[],
+  title: string,
+  url: string,
+  content: string,
+  createdAt: string
+}
+
+export interface WallabagArticlesResponse {
+  page: number,
+  pages: number,
+  articles: WallabagArticle[]
+}
+
+export default class WallabagAPI {
+  plugin: WallabagPlugin;
+  token: Token;
+
+  constructor(token: Token, plugin: WallabagPlugin) {
+    this.plugin = plugin;
+    this.token = token;
+  }
+
+  static async authenticate(
+    serverUrl: string,
+    clientId: string,
+    clientSecret: string,
+    username: string,
+    password: string
+  ): Promise<Token> {
+    return request({
+      url: `${serverUrl}/oauth/v2/token`,
+      method: 'POST',
+      body: `grant_type=password&client_id=${clientId}&client_secret=${clientSecret}&username=${username}&password=${password}`,
+      contentType: 'application/x-www-form-urlencoded',
+    }).then((response) => {
+      const parsed = JSON.parse(response);
+      return {
+        clientId: clientId,
+        clientSecret: clientSecret,
+        accessToken: parsed.access_token,
+        refreshToken: parsed.refresh_token,
+      };
+    });
+  }
+
+  async refresh(): Promise<void> {
+    return request({
+      url: `${this.plugin.settings.serverUrl}/oauth/v2/token?grant_type=refresh_token&refresh_token=${this.token.refreshToken}&client_id=${this.token.clientId}&client_secret=${this.token.clientSecret}`
+    }).then((response) => {
+      const parsed = JSON.parse(response);
+      this.token = {
+        clientId: this.token.clientId,
+        clientSecret: this.token.clientSecret,
+        accessToken: parsed.access_token,
+        refreshToken: parsed.refresh_token,
+      };
+    });
+  }
+
+  private convertWallabagArticle(article: any) {
+    return {
+      id: article['id'],
+      tags: article['tags'].map((tag: any) => tag['slug']),
+      title: article['title'],
+      url: article['url'],
+      content: article['content'],
+      createdAt: article['created_at']
+    };
+  }
+
+  private convertWallabagArticlesResponse(response: RequestUrlResponse): WallabagArticlesResponse {
+    return {
+      page: response.json['page'],
+      pages: response.json['pages'],
+      articles: response.json['_embedded']['items'].map(this.convertWallabagArticle)
+    };
+  }
+
+  private async tokenRefreshingFetch(url: string): Promise<RequestUrlResponse> {
+    return requestUrl({
+      url: url,
+      headers: {
+        'Authorization': `Bearer ${this.token.accessToken}`
+      }
+    }).catch(async (reason) => {
+      if (reason.status === 401) {
+        console.log('Likely the token expired, refreshing it.');
+        await this.refresh();
+        await this.plugin.onAuthenticated(this.token);
+        return this.tokenRefreshingFetch(url);
+      } else {
+        console.log(`Something else failed ${reason}`);
+        throw new Error('');
+      }
+    });
+  }
+
+  async fetchArticles(page = 1, results: WallabagArticle[] = []): Promise<WallabagArticle[]> {
+    const url = `${this.plugin.settings.serverUrl}/api/entries.json?archive=0&page=${page}&tags=${this.plugin.settings.tag}`;
+    return this.tokenRefreshingFetch(url).then((value) => {
+      const response = this.convertWallabagArticlesResponse(value);
+      if (response.pages === response.page) {
+        return [...results, ...response.articles];
+      } else {
+        return this.fetchArticles(page+1,[...results, ...response.articles]);
+      }
+    });
+  }
+
+  async exportArticle(id: number, format = 'pdf'): Promise<ArrayBuffer> {
+    const url = `${this.plugin.settings.serverUrl}/api/entries/${id}/export.${format}`;
+    return this.tokenRefreshingFetch(url).then((value) => {
+      return value.arrayBuffer;
+    });
+  }
+
+}
