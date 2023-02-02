@@ -174,13 +174,18 @@ export class WallabagSettingTab extends PluginSettingTab {
             this.authenticated = false;
             this.display();
           } else {
-            WallabagAPI.authenticate(this.plugin.settings.serverUrl, clientId, clientSecret, username, password).then(async (token) => {
-              const notice = new Notice('Authenticating with Wallabag...');
-              await this.plugin.onAuthenticated(token);
-              this.authenticated = true;
-              this.display();
-              notice.setMessage('Authenticated with Wallabag.');
-            });
+            const notice = new Notice('Authenticating with Wallabag...');
+            try {
+              await WallabagAPI.authenticate(this.plugin.settings.serverUrl, clientId, clientSecret, username, password).then(async (token) => {
+                await this.plugin.onAuthenticated(token);
+                this.authenticated = true;
+                this.display();
+                notice.setMessage('Authenticated with Wallabag.');
+              });
+            } catch (error) {
+              console.log(error);
+              notice.setMessage('Authentication with Wallabag failed.');
+            }
           }
         });
     });

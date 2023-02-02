@@ -49,12 +49,12 @@ export default class WallabagAPI {
     });
   }
 
-  async refresh(): Promise<void> {
+  async refresh(): Promise<Token> {
     return request({
       url: `${this.plugin.settings.serverUrl}/oauth/v2/token?grant_type=refresh_token&refresh_token=${this.token.refreshToken}&client_id=${this.token.clientId}&client_secret=${this.token.clientSecret}`
     }).then((response) => {
       const parsed = JSON.parse(response);
-      this.token = {
+      return {
         clientId: this.token.clientId,
         clientSecret: this.token.clientSecret,
         accessToken: parsed.access_token,
@@ -91,9 +91,15 @@ export default class WallabagAPI {
     }).catch(async (reason) => {
       if (reason.status === 401) {
         console.log('Likely the token expired, refreshing it.');
-        await this.refresh();
-        await this.plugin.onAuthenticated(this.token);
-        return this.tokenRefreshingFetch(url);
+        return await this.refresh().then(async (token) => {
+          this.token = token;
+          await this.plugin.onAuthenticated(this.token);
+          return this.tokenRefreshingFetch(url);
+        }).catch(async (reason) => {
+          console.log('Token refresh failed.', reason);
+          await this.plugin.onTokenRefreshFailed();
+          throw new Error('');
+        });
       } else {
         console.log(`Something else failed ${reason}`);
         throw new Error('');

@@ -52,4 +52,8 @@ export default class WallabagPlugin extends Plugin {
     this.authenticated = false;
   }
 
+  async onTokenRefreshFailed() {
+    await this.onLogout();
+    new Notice('Authentication refresh has failed. Please authenticate again.');
+  }
 }
