@@ -14,12 +14,12 @@ export interface TextSetting {
 export class WallabagSettingTab extends PluginSettingTab {
 
   private plugin: WallabagPlugin;
-  private authenticated: boolean;
+  private isAuthenticated: (_: void) => boolean;
 
-  constructor(app: App, plugin: WallabagPlugin, authenticated: boolean) {
+  constructor(app: App, plugin: WallabagPlugin, isAuthenticated: (_: void) => boolean) {
     super(app, plugin);
     this.plugin = plugin;
-    this.authenticated = authenticated;
+    this.isAuthenticated = isAuthenticated;
   }
 
   display() {
@@ -127,11 +127,11 @@ export class WallabagSettingTab extends PluginSettingTab {
 
     let clientId = '', clientSecret = '', username = '', password = '';
 
-    if (this.authenticated) {
+    if (this.isAuthenticated()) {
       this.containerEl.createEl('strong', { text: 'You are currently authenticated, to change authentication settings, logout first.'});
     }
 
-    const authenticationClass = this.authenticated ? 'wallabag-setting-hidden' : 'wallabag-setting-shown';
+    const authenticationClass = this.isAuthenticated() ? 'wallabag-setting-hidden' : 'wallabag-setting-shown';
 
     ([
       {
@@ -166,19 +166,17 @@ export class WallabagSettingTab extends PluginSettingTab {
 
     new Setting(this.containerEl).addButton((button) => {
       button
-        .setButtonText(this.authenticated ? 'Logout' : 'Authenticate')
-        .setClass(this.authenticated ? 'mod-warning' : 'mod-cta')
+        .setButtonText(this.isAuthenticated() ? 'Logout' : 'Authenticate')
+        .setClass(this.isAuthenticated() ? 'mod-warning' : 'mod-cta')
         .onClick(async () => {
-          if (this.authenticated) {
+          if (this.isAuthenticated()) {
             await this.plugin.onLogout();
-            this.authenticated = false;
             this.display();
           } else {
             const notice = new Notice('Authenticating with Wallabag...');
             try {
               await WallabagAPI.authenticate(this.plugin.settings.serverUrl, clientId, clientSecret, username, password).then(async (token) => {
                 await this.plugin.onAuthenticated(token);
-                this.authenticated = true;
                 this.display();
                 notice.setMessage('Authenticated with Wallabag.');
               });

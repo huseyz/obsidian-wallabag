@@ -13,7 +13,7 @@ export default class WallabagPlugin extends Plugin {
 
   override async onload() {
     await this.init();
-    this.addSettingTab(new WallabagSettingTab(this.app, this, this.authenticated));
+    this.addSettingTab(new WallabagSettingTab(this.app, this, _ => this.authenticated));
     this.addCommand(new SyncArticlesCommand(this));
     this.addCommand(new ClearSyncedArticlesCacheCommand(this));
   }
