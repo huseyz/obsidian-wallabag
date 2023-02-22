@@ -18,7 +18,7 @@ export default class NoteTemplate {
     };
     let content = this.content;
     Object.keys(variables).forEach((key) => {
-      content = content.replace(key, variables[key]);
+      content = content.replaceAll(key, variables[key]);
     });
     return content;
   }
