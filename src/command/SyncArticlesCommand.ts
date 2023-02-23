@@ -35,7 +35,7 @@ export default class SyncArticlesCommand implements Command {
   }
 
   private getFilename(wallabagArticle: WallabagArticle): string {
-    return wallabagArticle.title.replace('\\', ' ').replace('/', ' ').replace(':', '-').replace('|', '-');
+    return wallabagArticle.title.replace('\\', ' ').replace('/', ' ').replace(':', '-').replace('|', '-').replace('?', ' ');
   }
 
   private async createNoteIfNotExists(filename: string, content: string) {
