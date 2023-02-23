@@ -19,7 +19,7 @@
       "dom",
       "es5",
       "scripthost",
-      "es2018",
+      "es2021",
       "DOM.Iterable"
     ]
   },
