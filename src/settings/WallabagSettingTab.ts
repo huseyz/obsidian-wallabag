@@ -94,6 +94,17 @@ export class WallabagSettingTab extends PluginSettingTab {
         });
       });
 
+    new Setting(this.containerEl)
+      .setName('Convert HTML Content extracted by Wallabag to Markdown')
+      .setDesc('If enabled the content of the Wallabag article will be converted to markdown before being used for the new article.')
+      .addToggle(async (toggle) => {
+        toggle.setValue(this.plugin.settings.convertHtmlToMarkdown === 'true');
+        toggle.onChange(async (value) => {
+          this.plugin.settings.convertHtmlToMarkdown = String(value);
+          await this.plugin.saveSettings();
+        });
+      });
+
     this.authenticationSettings();
   }
 

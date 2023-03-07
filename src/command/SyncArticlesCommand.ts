@@ -63,7 +63,7 @@ export default class SyncArticlesCommand implements Command {
         if (this.plugin.settings.downloadAsPDF !== 'true') {
           const template = this.plugin.settings.articleTemplate === '' ? DefaultTemplate : await this.getUserTemplate();
           const filename = path.join(this.plugin.settings.folder, `${this.getFilename(article)}.md`);
-          const content = template.fill(article, this.plugin.settings.serverUrl);
+          const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.convertHtmlToMarkdown);
           await this.createNoteIfNotExists(filename, content);
           return article.id;
         } else {

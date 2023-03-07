@@ -6,6 +6,7 @@ export interface WallabagSettings {
   articleTemplate: string;
   pdfFolder: string;
   createPDFNote: string;
+  convertHtmlToMarkdown: string
 }
 
 export const DEFAULT_SETTINGS: WallabagSettings = {
@@ -15,5 +16,6 @@ export const DEFAULT_SETTINGS: WallabagSettings = {
   downloadAsPDF: 'false',
   articleTemplate: '',
   pdfFolder: '',
-  createPDFNote: 'false'
+  createPDFNote: 'false',
+  convertHtmlToMarkdown: 'false'
 };
