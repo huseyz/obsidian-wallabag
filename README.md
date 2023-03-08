@@ -17,13 +17,13 @@ Use the command "Sync Wallabag Articles" to sync new articles. Plugin will keep 
 
 There are various settings under the plugin settings you can use to personalize your workflow, here are some important ones:
 
-| Setting  |  Decsription |
-|:--|:--|
-|Tag to sync | Use this for syncing only the articles tagged with tag. If empty plugin will sync all the articles.  |
-|Article Notes Folder | Define the folder you want synced notes will be created. If empty notes will be created at the vault root.   |
-|Article Note Template  | Use to pass a custom template for notes. See the [Templating](#templating) for more details.  |
-| Export as PDF | If enabled synced articles will be exported as PDFs.|
-
+| Setting                                                | Decsription                                                                                                         |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------ |
+| Tag to sync                                            | Use this for syncing only the articles tagged with tag. If empty plugin will sync all the articles.                 |
+| Article Notes Folder                                   | Define the folder you want synced notes will be created. If empty notes will be created at the vault root.          |
+| Article Note Template                                  | Use to pass a custom template for notes. See the [Templating](#templating) for more details.                        |
+| Export as PDF                                          | If enabled synced articles will be exported as PDFs.                                                                |
+| Convert HTML Content extracted by Wallabag to Markdown | If enabled the content of the Wallabag article will be converted to markdown before being used for the new article. |
 
 ## Templating
 
@@ -32,14 +32,14 @@ By default this plugin offers two builtin templates; one for inserting the conte
 ![](screenshots/ss1.png)
 
 You can use a custom template, in that case plugin will pass the following variables.
-| Variable        | Description                                                                                                        |
+| Variable | Description |
 |:----------------|:-------------------------------------------------------------------------------------------------------------------|
-| `article_title` | Title of the article                                                                                               |
-| `original_link` | Link to the source article                                                                                         |
-| `wallabag_link` | Link to the article in Wallabag                                                                                    |
-| `content`       | HTML content extracted by wallabag                                                                                 |
-| `pdf_link`      | An Obsidian wikilink to the exported pdf file. <sub><br> Only populated if the PDF export option is choosen.</sub> |
-| `tags`          | Comma separated list of tags attached to the Wallabag article                                                      |
+| `article_title` | Title of the article |
+| `original_link` | Link to the source article |
+| `wallabag_link` | Link to the article in Wallabag |
+| `content` | HTML content extracted by wallabag |
+| `pdf_link` | An Obsidian wikilink to the exported pdf file. <sub><br> Only populated if the PDF export option is choosen.</sub> |
+| `tags` | Comma separated list of tags attached to the Wallabag article |
 
 I mainly use the template to export pdfs and use [Annotator]() to read using the following template.
 
@@ -51,13 +51,12 @@ annotation-target: {{pdf_link}}
 
 ![](screenshots/ss2.png)
 
-
 ## Installation
 
 ### Manually
 
 - You need Obsidian v1.0.0+ for latest version of plugin
-- Get the [Latest release of the plugin](https://github.com/huseyz/obsidian-wallabag/releases/latest) 
+- Get the [Latest release of the plugin](https://github.com/huseyz/obsidian-wallabag/releases/latest)
 - Extract the files in your vault's plugins folder: `[VAULT]/.obsidian/plugins/`
 - Reload Obsidian
 - Make sure Safe Mode is off and the plugins is enabled.

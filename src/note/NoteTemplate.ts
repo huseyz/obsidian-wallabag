@@ -1,4 +1,5 @@
 import { WallabagArticle } from 'wallabag/WallabagAPI';
+import { htmlToMarkdown } from 'obsidian';
 
 export default class NoteTemplate {
   content: string;
@@ -7,12 +8,12 @@ export default class NoteTemplate {
     this.content = content;
   }
 
-  fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, pdfLink = ''): string {
+  fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, pdfLink = ''): string {
     const variables: {[key: string]: string} = {
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
       '{{wallabag_link}}': `${serverBaseUrl}/view/${wallabagArticle.id}`,
-      '{{content}}': wallabagArticle.content,
+      '{{content}}': convertHtmlToMarkdown === 'true' ? htmlToMarkdown(wallabagArticle.content) : wallabagArticle.content,
       '{{pdf_link}}': pdfLink,
       '{{tags}}': wallabagArticle.tags.join(', ')
     };
