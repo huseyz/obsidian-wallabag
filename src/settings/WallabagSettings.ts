@@ -6,7 +6,8 @@ export interface WallabagSettings {
   articleTemplate: string;
   pdfFolder: string;
   createPDFNote: string;
-  convertHtmlToMarkdown: string
+  convertHtmlToMarkdown: string;
+  idInTitle: string;
 }
 
 export const DEFAULT_SETTINGS: WallabagSettings = {
@@ -17,5 +18,6 @@ export const DEFAULT_SETTINGS: WallabagSettings = {
   articleTemplate: '',
   pdfFolder: '',
   createPDFNote: 'false',
-  convertHtmlToMarkdown: 'false'
+  convertHtmlToMarkdown: 'false',
+  idInTitle: 'false'
 };
