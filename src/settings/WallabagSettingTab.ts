@@ -105,6 +105,17 @@ export class WallabagSettingTab extends PluginSettingTab {
         });
       });
 
+    new Setting(this.containerEl)
+      .setName('Add article ID in the title')
+      .setDesc('If enabled the article ID will be added to title.')
+      .addToggle(async (toggle) => {
+        toggle.setValue(this.plugin.settings.idInTitle === 'true');
+        toggle.onChange(async (value) => {
+          this.plugin.settings.idInTitle = String(value);
+          await this.plugin.saveSettings();
+        });
+      });
+
     this.authenticationSettings();
   }
 

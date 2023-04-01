@@ -35,7 +35,12 @@ export default class SyncArticlesCommand implements Command {
   }
 
   private getFilename(wallabagArticle: WallabagArticle): string {
-    return wallabagArticle.title.replaceAll('\\', ' ').replaceAll('/', ' ').replaceAll(':', '-').replaceAll('|', '-').replaceAll('?', ' ');
+    const filename = wallabagArticle.title.replaceAll('\\', ' ').replaceAll('/', ' ').replaceAll(':', '-').replaceAll('|', '-').replaceAll('?', ' ');
+    if (this.plugin.settings.idInTitle === 'true') {
+      return `${filename}-${wallabagArticle.id}`;
+    } else {
+      return filename;
+    }
   }
 
   private async createNoteIfNotExists(filename: string, content: string) {
