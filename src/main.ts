@@ -13,9 +13,15 @@ export default class WallabagPlugin extends Plugin {
 
   override async onload() {
     await this.init();
+
+    const syncArticlesCommand = new SyncArticlesCommand(this);
+
     this.addSettingTab(new WallabagSettingTab(this.app, this, _ => this.authenticated));
-    this.addCommand(new SyncArticlesCommand(this));
+    this.addCommand(syncArticlesCommand);
     this.addCommand(new ClearSyncedArticlesCacheCommand(this));
+
+    // This creates an icon in the left ribbon.
+    this.addRibbonIcon('sheets-in-box', 'Sync Wallabag articles', () => syncArticlesCommand.callback());
   }
 
   private async init() {
