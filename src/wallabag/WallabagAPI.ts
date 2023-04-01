@@ -82,12 +82,15 @@ export default class WallabagAPI {
     };
   }
 
-  private async tokenRefreshingFetch(url: string): Promise<RequestUrlResponse> {
+  private async tokenRefreshingFetch(url: string, method?: string, body?: string): Promise<RequestUrlResponse> {
     return requestUrl({
       url: url,
       headers: {
-        'Authorization': `Bearer ${this.token.accessToken}`
-      }
+        'Authorization': `Bearer ${this.token.accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      method: method ? method : 'GET',
+      body: body
     }).catch(async (reason) => {
       if (reason.status === 401) {
         console.log('Likely the token expired, refreshing it.');
@@ -124,6 +127,11 @@ export default class WallabagAPI {
     return this.tokenRefreshingFetch(url).then((value) => {
       return value.arrayBuffer;
     });
+  }
+
+  async archiveArticle(id: number) {
+    const url = `${this.plugin.settings.serverUrl}/api/entries/${id}`;
+    return this.tokenRefreshingFetch(url, 'PATCH', JSON.stringify({ archive: 1 }));
   }
 
 }

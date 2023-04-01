@@ -24,6 +24,8 @@ There are various settings under the plugin settings you can use to personalize 
 | Article Note Template                                  | Use to pass a custom template for notes. See the [Templating](#templating) for more details.                        |
 | Export as PDF                                          | If enabled synced articles will be exported as PDFs.                                                                |
 | Convert HTML Content extracted by Wallabag to Markdown | If enabled the content of the Wallabag article will be converted to markdown before being used for the new article. |
+| Archive article after sync                             | If enabled the article will be archived after being synced.                                                         |
+| Add article ID in the title                            | If enabled the article ID will be added to title.                                                                   |
 
 ## Templating
 

@@ -106,6 +106,17 @@ export class WallabagSettingTab extends PluginSettingTab {
       });
 
     new Setting(this.containerEl)
+      .setName('Archive article after sync')
+      .setDesc('If enabled the article will be archived after being synced.')
+      .addToggle(async (toggle) => {
+        toggle.setValue(this.plugin.settings.archiveAfterSync === 'true');
+        toggle.onChange(async (value) => {
+          this.plugin.settings.archiveAfterSync = String(value);
+          await this.plugin.saveSettings();
+        });
+      });
+
+    new Setting(this.containerEl)
       .setName('Add article ID in the title')
       .setDesc('If enabled the article ID will be added to title.')
       .addToggle(async (toggle) => {
