@@ -42,6 +42,9 @@ You can use a custom template, in that case plugin will pass the following varia
 | `content` | HTML content extracted by wallabag |
 | `pdf_link` | An Obsidian wikilink to the exported pdf file. <sub><br> Only populated if the PDF export option is choosen.</sub> |
 | `tags` | Comma separated list of tags attached to the Wallabag article |
+| `reading_time` | Reading time of the article |
+| `preview_picture` | link to preview picture of the article |
+| `domain_name` | Link to the source domain article |
 
 I mainly use the template to export pdfs and use [Annotator]() to read using the following template.
 

@@ -8,7 +8,10 @@ export interface WallabagArticle {
   title: string,
   url: string,
   content: string,
-  createdAt: string
+  createdAt: string,
+  readingTime: string,
+  previewPicture: string,
+  domainName: string
 }
 
 export interface WallabagArticlesResponse {
@@ -70,7 +73,10 @@ export default class WallabagAPI {
       title: article['title'],
       url: article['url'],
       content: article['content'],
-      createdAt: article['created_at']
+      createdAt: article['created_at'],
+      readingTime: article['reading_time'],
+      previewPicture: article['preview_picture'],
+      domainName: article['domain_name']
     };
   }
 
