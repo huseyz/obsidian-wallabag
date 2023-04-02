@@ -70,7 +70,6 @@ export default class SyncArticlesCommand implements Command {
           const filename = path.join(this.plugin.settings.folder, `${this.getFilename(article)}.md`);
           const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.convertHtmlToMarkdown);
           await this.createNoteIfNotExists(filename, content);
-          return article.id;
         } else {
           const pdfFilename = path.join(this.plugin.settings.pdfFolder, `${this.getFilename(article)}.pdf`);
           const pdf = await this.plugin.api.exportArticle(article.id);
@@ -81,8 +80,11 @@ export default class SyncArticlesCommand implements Command {
             const content = template.fill(article, this.plugin.settings.serverUrl, pdfFilename);
             await this.createNoteIfNotExists(filename, content);
           }
-          return article.id;
         }
+        if (this.plugin.settings.archiveAfterSync === 'true') {
+          await this.plugin.api.archiveArticle(article.id);
+        }
+        return article.id;
       }));
     await this.writeSynced([...newIds, ...previouslySynced]);
     fetchNotice.setMessage(sanitizeHTMLToDom(`Sync from Wallabag is now completed. <br> ${newIds.length} new article(s) has been synced.`));
