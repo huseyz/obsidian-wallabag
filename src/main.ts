@@ -20,6 +20,10 @@ export default class WallabagPlugin extends Plugin {
     this.addCommand(syncArticlesCommand);
     this.addCommand(new ClearSyncedArticlesCacheCommand(this));
 
+    if (this.settings.syncOnStartup) {
+      syncArticlesCommand.callback();
+    }
+
     // This creates an icon in the left ribbon.
     this.addRibbonIcon('sheets-in-box', 'Sync Wallabag articles', () => syncArticlesCommand.callback());
   }

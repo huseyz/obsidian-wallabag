@@ -52,12 +52,29 @@ export class WallabagSettingTab extends PluginSettingTab {
           '<code>{{original_link}}</code>: Link to the original article.<br>' +
           '<code>{{wallabag_link}}</code>: Link to the Wallabag article.<br>' +
           '<code>{{content}}</code>: HTML Content extracted by Wallabag. <br>' +
-          '<code>{{pdf_link}}</code>: An Obsidian link to the exported pdf.'
+          '<code>{{pdf_link}}</code>: An Obsidian link to the exported pdf.' +
+          '<code>{{tags}}</code>: Tags of the article.<br>' +
+          '<code>{{reading_time}}</code>: Reading time of the article.<br>' +
+          '<code>{{preview_picture}}</code>: Preview picture of the article.<br>' +
+          '<code>{{domain_name}}</code>: Domain name of the article.<br>'
         ),
         get: () => this.plugin.settings.articleTemplate,
         set: this.updateSetting('articleTemplate')
-      }
+      },
     ] as TextSetting[]).forEach(this.addTextSettingHere);
+
+    new Setting(this.containerEl)
+      .setName('Sync on startup')
+      .setDesc('If enabled, articles will be synced on startup.')
+      .addToggle(async (toggle) => {
+        toggle
+          .setValue(this.plugin.settings.syncOnStartup === 'true')
+          .onChange(async (value) => {
+            this.plugin.settings.syncOnStartup = String(value);
+            await this.plugin.saveSettings();
+            this.display();
+          });
+      });
 
     new Setting(this.containerEl)
       .setName('Export as PDF')

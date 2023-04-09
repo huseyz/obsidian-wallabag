@@ -9,6 +9,7 @@ export interface WallabagSettings {
   convertHtmlToMarkdown: string;
   idInTitle: string;
   archiveAfterSync: string;
+  syncOnStartup: string;
 }
 
 export const DEFAULT_SETTINGS: WallabagSettings = {
@@ -22,4 +23,5 @@ export const DEFAULT_SETTINGS: WallabagSettings = {
   convertHtmlToMarkdown: 'false',
   idInTitle: 'false',
   archiveAfterSync: 'false',
+  syncOnStartup: 'false',
 };
