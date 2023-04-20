@@ -12,6 +12,7 @@ export default class NoteTemplate {
     const variables: {[key: string]: string} = {
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
+      '{{created_at}}': wallabagArticle.createdAt,
       '{{wallabag_link}}': `${serverBaseUrl}/view/${wallabagArticle.id}`,
       '{{content}}': convertHtmlToMarkdown === 'true' ? htmlToMarkdown(wallabagArticle.content) : wallabagArticle.content,
       '{{pdf_link}}': pdfLink,
