@@ -54,7 +54,10 @@ export default class WallabagAPI {
 
   async refresh(): Promise<Token> {
     return request({
-      url: `${this.plugin.settings.serverUrl}/oauth/v2/token?grant_type=refresh_token&refresh_token=${this.token.refreshToken}&client_id=${this.token.clientId}&client_secret=${this.token.clientSecret}`
+      url: `${this.plugin.settings.serverUrl}/oauth/v2/token`,
+      method: 'POST',
+      body: `grant_type=refresh_token&refresh_token=${this.token.refreshToken}&client_id=${this.token.clientId}&client_secret=${this.token.clientSecret}`,
+      contentType: 'application/x-www-form-urlencoded',
     }).then((response) => {
       const parsed = JSON.parse(response);
       return {
