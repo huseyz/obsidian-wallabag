@@ -50,6 +50,7 @@ export class WallabagSettingTab extends PluginSettingTab {
           'The template file that will be used for the new articles.<br> ' +
           '<code>{{article_title}}</code>: Title of the article.<br>' +
           '<code>{{original_link}}</code>: Link to the original article.<br>' +
+          '<code>{{created_at}}</code>: Creation date of the article in Wallabag.<br>' +
           '<code>{{wallabag_link}}</code>: Link to the Wallabag article.<br>' +
           '<code>{{content}}</code>: HTML Content extracted by Wallabag. <br>' +
           '<code>{{pdf_link}}</code>: An Obsidian link to the exported pdf.' +

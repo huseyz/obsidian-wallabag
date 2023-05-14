@@ -38,6 +38,7 @@ You can use a custom template, in that case plugin will pass the following varia
 |:----------------|:-------------------------------------------------------------------------------------------------------------------|
 | `article_title` | Title of the article |
 | `original_link` | Link to the source article |
+| `created_at` | Creation date of the article in Wallabag |
 | `wallabag_link` | Link to the article in Wallabag |
 | `content` | HTML content extracted by wallabag |
 | `pdf_link` | An Obsidian wikilink to the exported pdf file. <sub><br> Only populated if the PDF export option is choosen.</sub> |
