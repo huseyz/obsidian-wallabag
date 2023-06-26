@@ -20,7 +20,7 @@ export default class WallabagPlugin extends Plugin {
     this.addCommand(syncArticlesCommand);
     this.addCommand(new ClearSyncedArticlesCacheCommand(this));
 
-    if (this.settings.syncOnStartup) {
+    if (this.settings.syncOnStartup === 'true') {
       syncArticlesCommand.callback();
     }
 
