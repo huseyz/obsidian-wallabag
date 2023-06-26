@@ -1,7 +1,6 @@
 import WallabagPlugin from 'main';
 import NoteTemplate, { DefaultTemplate, PDFTemplate } from 'note/NoteTemplate';
-import { Command, Notice, sanitizeHTMLToDom } from 'obsidian';
-import * as path from 'path';
+import { Command, Notice, sanitizeHTMLToDom, normalizePath } from 'obsidian';
 import { WallabagArticle } from 'wallabag/WallabagAPI';
 
 export default class SyncArticlesCommand implements Command {
@@ -67,16 +66,16 @@ export default class SyncArticlesCommand implements Command {
       .map(async (article) => {
         if (this.plugin.settings.downloadAsPDF !== 'true') {
           const template = this.plugin.settings.articleTemplate === '' ? DefaultTemplate : await this.getUserTemplate();
-          const filename = path.join(this.plugin.settings.folder, `${this.getFilename(article)}.md`);
+          const filename = normalizePath(`${this.plugin.settings.folder}/${this.getFilename(article)}.md`);
           const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.convertHtmlToMarkdown);
           await this.createNoteIfNotExists(filename, content);
         } else {
-          const pdfFilename = path.join(this.plugin.settings.pdfFolder, `${this.getFilename(article)}.pdf`);
+          const pdfFilename = normalizePath(`${this.plugin.settings.pdfFolder}/${this.getFilename(article)}.pdf`);
           const pdf = await this.plugin.api.exportArticle(article.id);
           await this.plugin.app.vault.adapter.writeBinary(pdfFilename, pdf);
           if (this.plugin.settings.createPDFNote) {
             const template = this.plugin.settings.articleTemplate === '' ? PDFTemplate : await this.getUserTemplate();
-            const filename = path.join(this.plugin.settings.folder, `${this.getFilename(article)}.md`);
+            const filename = normalizePath(`${this.plugin.settings.folder}/${this.getFilename(article)}.md`);
             const content = template.fill(article, this.plugin.settings.serverUrl, pdfFilename);
             await this.createNoteIfNotExists(filename, content);
           }
