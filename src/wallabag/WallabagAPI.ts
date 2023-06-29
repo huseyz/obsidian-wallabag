@@ -119,14 +119,14 @@ export default class WallabagAPI {
     });
   }
 
-  async fetchArticles(page = 1, results: WallabagArticle[] = []): Promise<WallabagArticle[]> {
-    const url = `${this.plugin.settings.serverUrl}/api/entries.json?archive=0&page=${page}&tags=${this.plugin.settings.tag}`;
+  async fetchArticles(archive = 0, page = 1, results: WallabagArticle[] = []): Promise<WallabagArticle[]> {
+    const url = `${this.plugin.settings.serverUrl}/api/entries.json?archive=${archive}&page=${page}&tags=${this.plugin.settings.tag}`;
     return this.tokenRefreshingFetch(url).then((value) => {
       const response = this.convertWallabagArticlesResponse(value);
       if (response.pages === response.page) {
         return [...results, ...response.articles];
       } else {
-        return this.fetchArticles(page+1,[...results, ...response.articles]);
+        return this.fetchArticles(archive, page+1, [...results, ...response.articles]);
       }
     });
   }
