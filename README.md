@@ -22,6 +22,8 @@ There are various settings under the plugin settings you can use to personalize 
 | Tag to sync                                            | Use this for syncing only the articles tagged with tag. If empty plugin will sync all the articles.                 |
 | Article Notes Folder                                   | Define the folder you want synced notes will be created. If empty notes will be created at the vault root.          |
 | Article Note Template                                  | Use to pass a custom template for notes. See the [Templating](#templating) for more details.                        |
+| Sync on startup                                        | If enabled, articles will be synced on startup.                                                                     |
+| Sync archived articles                                 | If enabled, archived articles will be synced                                                                        |
 | Export as PDF                                          | If enabled synced articles will be exported as PDFs.                                                                |
 | Convert HTML Content extracted by Wallabag to Markdown | If enabled the content of the Wallabag article will be converted to markdown before being used for the new article. |
 | Archive article after sync                             | If enabled the article will be archived after being synced.                                                         |

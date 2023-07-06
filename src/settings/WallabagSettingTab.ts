@@ -78,6 +78,19 @@ export class WallabagSettingTab extends PluginSettingTab {
       });
 
     new Setting(this.containerEl)
+      .setName('Sync archived articles')
+      .setDesc('If enabled, archived articles will be synced.')
+      .addToggle(async (toggle) => {
+        toggle
+          .setValue(this.plugin.settings.syncArchived === 'true')
+          .onChange(async (value) => {
+            this.plugin.settings.syncArchived = String(value);
+            await this.plugin.saveSettings();
+            this.display();
+          });
+      });
+
+    new Setting(this.containerEl)
       .setName('Export as PDF')
       .setDesc('If enabled synced articles will be exported as PDFs.')
       .addToggle(async (toggle) => {

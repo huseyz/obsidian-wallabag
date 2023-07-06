@@ -10,6 +10,7 @@ export interface WallabagSettings {
   idInTitle: string;
   archiveAfterSync: string;
   syncOnStartup: string;
+  syncArchived: string;
 }
 
 export const DEFAULT_SETTINGS: WallabagSettings = {
@@ -24,4 +25,5 @@ export const DEFAULT_SETTINGS: WallabagSettings = {
   idInTitle: 'false',
   archiveAfterSync: 'false',
   syncOnStartup: 'false',
+  syncArchived: 'false'
 };
