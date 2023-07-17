@@ -28,6 +28,7 @@ There are various settings under the plugin settings you can use to personalize 
 | Convert HTML Content extracted by Wallabag to Markdown | If enabled the content of the Wallabag article will be converted to markdown before being used for the new article. |
 | Archive article after sync                             | If enabled the article will be archived after being synced.                                                         |
 | Add article ID in the title                            | If enabled the article ID will be added to title.                                                                   |
+| Tag format                                             | Determines how the tags will be populated in the created not. CSV(tag1, tag2) or hashtags(#tag1 #tag2)              |
 
 ## Templating
 
@@ -44,7 +45,7 @@ You can use a custom template, in that case plugin will pass the following varia
 | `wallabag_link` | Link to the article in Wallabag |
 | `content` | HTML content extracted by wallabag |
 | `pdf_link` | An Obsidian wikilink to the exported pdf file. <sub><br> Only populated if the PDF export option is choosen.</sub> |
-| `tags` | Comma separated list of tags attached to the Wallabag article |
+| `tags` | Tags attached to the Wallabag article, format depends on the setting |
 | `reading_time` | Reading time of the article |
 | `preview_picture` | link to preview picture of the article |
 | `domain_name` | Link to the source domain article |
@@ -65,6 +66,6 @@ annotation-target: {{pdf_link}}
 
 - You need Obsidian v1.0.0+ for latest version of plugin
 - Get the [Latest release of the plugin](https://github.com/huseyz/obsidian-wallabag/releases/latest)
-- Extract the files in your vault's plugins folder: `[VAULT]/.obsidian/plugins/`
+- Extract the folder in the release zip in your vault's plugins folder: `[VAULT]/.obsidian/plugins/`
 - Reload Obsidian
 - Make sure Safe Mode is off and the plugins is enabled.
