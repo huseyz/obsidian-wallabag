@@ -11,6 +11,7 @@ export interface WallabagSettings {
   archiveAfterSync: string;
   syncOnStartup: string;
   syncArchived: string;
+  tagFormat: string;
 }
 
 export const DEFAULT_SETTINGS: WallabagSettings = {
@@ -25,5 +26,6 @@ export const DEFAULT_SETTINGS: WallabagSettings = {
   idInTitle: 'false',
   archiveAfterSync: 'false',
   syncOnStartup: 'false',
-  syncArchived: 'false'
+  syncArchived: 'false',
+  tagFormat: 'csv',
 };

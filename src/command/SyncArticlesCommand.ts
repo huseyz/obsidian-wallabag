@@ -67,7 +67,7 @@ export default class SyncArticlesCommand implements Command {
         if (this.plugin.settings.downloadAsPDF !== 'true') {
           const template = this.plugin.settings.articleTemplate === '' ? DefaultTemplate : await this.getUserTemplate();
           const filename = normalizePath(`${this.plugin.settings.folder}/${this.getFilename(article)}.md`);
-          const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.convertHtmlToMarkdown);
+          const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.convertHtmlToMarkdown, this.plugin.settings.tagFormat);
           await this.createNoteIfNotExists(filename, content);
         } else {
           const pdfFilename = normalizePath(`${this.plugin.settings.pdfFolder}/${this.getFilename(article)}.pdf`);
@@ -76,7 +76,7 @@ export default class SyncArticlesCommand implements Command {
           if (this.plugin.settings.createPDFNote) {
             const template = this.plugin.settings.articleTemplate === '' ? PDFTemplate : await this.getUserTemplate();
             const filename = normalizePath(`${this.plugin.settings.folder}/${this.getFilename(article)}.md`);
-            const content = template.fill(article, this.plugin.settings.serverUrl, pdfFilename);
+            const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.tagFormat, pdfFilename);
             await this.createNoteIfNotExists(filename, content);
           }
         }

@@ -157,7 +157,22 @@ export class WallabagSettingTab extends PluginSettingTab {
           await this.plugin.saveSettings();
         });
       });
-
+    new Setting(this.containerEl)
+      .setName('Tag format')
+      .setDesc(sanitizeHTMLToDom(
+        'Determines how the tags will be populated in the created note. <br>' +
+        'CSV: Comma-separeted tags e.g. <code>tag1, tag2, tag3</code> <br>' +
+        'Hashtags: Space-separeted hashtags<code>#tag1 #tag2 #tag3</code> <br>'
+      ))
+      .addDropdown(async (dropdown) => {
+        dropdown.addOption('csv', 'CSV');
+        dropdown.addOption('hashtag', 'Hashtags');
+        dropdown.setValue(this.plugin.settings.tagFormat);
+        dropdown.onChange(async (value) => {
+          this.plugin.settings.tagFormat = value;
+          await this.plugin.saveSettings();
+        });
+      });
     this.authenticationSettings();
   }
 

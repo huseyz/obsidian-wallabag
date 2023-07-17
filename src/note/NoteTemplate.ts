@@ -8,7 +8,7 @@ export default class NoteTemplate {
     this.content = content;
   }
 
-  fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, pdfLink = ''): string {
+  fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, tagFormat: string, pdfLink = ''): string {
     const variables: {[key: string]: string} = {
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
@@ -16,7 +16,7 @@ export default class NoteTemplate {
       '{{wallabag_link}}': `${serverBaseUrl}/view/${wallabagArticle.id}`,
       '{{content}}': convertHtmlToMarkdown === 'true' ? htmlToMarkdown(wallabagArticle.content) : wallabagArticle.content,
       '{{pdf_link}}': pdfLink,
-      '{{tags}}': wallabagArticle.tags.join(', '),
+      '{{tags}}': this.formatTags(wallabagArticle.tags, tagFormat),
       '{{reading_time}}': wallabagArticle.readingTime,
       '{{preview_picture}}': wallabagArticle.previewPicture,
       '{{domain_name}}': wallabagArticle.domainName
@@ -26,6 +26,14 @@ export default class NoteTemplate {
       content = content.replaceAll(key, variables[key]);
     });
     return content;
+  }
+
+  private formatTags(tags: string[], tagFormat: string): string {
+    switch (tagFormat) {
+    case 'csv': return tags.join(', ');
+    case 'hashtag': return tags.map(tag => `#${tag}`).join(' ');
+    default: return '';
+    }
   }
 }
 
