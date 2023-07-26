@@ -9,7 +9,7 @@ export default class NoteTemplate {
   }
 
   fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, tagFormat: string, pdfLink = ''): string {
-    const annotations = wallabagArticle.annotations.map(a => '> ' + a.quote).join('\n\n');
+    const annotations = wallabagArticle.annotations.map(a => '> ' + a.quote + (a.text ? '\n\n' + a.text : '')).join('\n\n');
     const variables: {[key: string]: string} = {
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
