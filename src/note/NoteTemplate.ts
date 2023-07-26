@@ -9,6 +9,7 @@ export default class NoteTemplate {
   }
 
   fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, tagFormat: string, pdfLink = ''): string {
+    const annotations = wallabagArticle.annotations.map(a => '> ' + a.quote).join('\n\n');
     const variables: {[key: string]: string} = {
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
@@ -19,7 +20,8 @@ export default class NoteTemplate {
       '{{tags}}': this.formatTags(wallabagArticle.tags, tagFormat),
       '{{reading_time}}': wallabagArticle.readingTime,
       '{{preview_picture}}': wallabagArticle.previewPicture,
-      '{{domain_name}}': wallabagArticle.domainName
+      '{{domain_name}}': wallabagArticle.domainName,
+      '{{annotations}}': annotations
     };
     let content = this.content;
     Object.keys(variables).forEach((key) => {
