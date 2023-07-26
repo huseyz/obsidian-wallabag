@@ -2,6 +2,16 @@ import WallabagPlugin from 'main';
 import { request, requestUrl, RequestUrlResponse } from 'obsidian';
 import { Token } from './WallabagAuth';
 
+interface WallabagAnnotation {
+  user: string,
+  annotator_schema_version: string,
+  id: number,
+  text: string,
+  created_at: string,
+  updated_at: string,
+  quote: string,
+}
+
 export interface WallabagArticle {
   id: number,
   tags: string[],
@@ -12,6 +22,7 @@ export interface WallabagArticle {
   readingTime: string,
   previewPicture: string,
   domainName: string
+  annotations: WallabagAnnotation[]
 }
 
 export interface WallabagArticlesResponse {
@@ -89,7 +100,8 @@ export default class WallabagAPI {
       createdAt: article['created_at'],
       readingTime: article['reading_time'],
       previewPicture: article['preview_picture'],
-      domainName: article['domain_name']
+      domainName: article['domain_name'],
+      annotations: article['annotations'],
     };
   }
 

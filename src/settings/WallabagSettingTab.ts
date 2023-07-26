@@ -57,7 +57,8 @@ export class WallabagSettingTab extends PluginSettingTab {
           '<code>{{tags}}</code>: Tags of the article.<br>' +
           '<code>{{reading_time}}</code>: Reading time of the article.<br>' +
           '<code>{{preview_picture}}</code>: Preview picture of the article.<br>' +
-          '<code>{{domain_name}}</code>: Domain name of the article.<br>'
+          '<code>{{domain_name}}</code>: Domain name of the article.<br>' +
+          '<code>{{annotations}}</code>: Created annotations of the article.<br>'
         ),
         get: () => this.plugin.settings.articleTemplate,
         set: this.updateSetting('articleTemplate')
