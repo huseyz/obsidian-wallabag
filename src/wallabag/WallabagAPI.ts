@@ -36,20 +36,30 @@ export default class WallabagAPI {
     username: string,
     password: string
   ): Promise<Token> {
-    return request({
+    const body = {
+      grant_type: 'password',
+      client_id: clientId,
+      client_secret: clientSecret,
+      username,
+      password
+    };
+
+    const requestOptions = {
       url: `${serverUrl}/oauth/v2/token`,
       method: 'POST',
-      body: `grant_type=password&client_id=${clientId}&client_secret=${clientSecret}&username=${username}&password=${password}`,
-      contentType: 'application/x-www-form-urlencoded',
-    }).then((response) => {
-      const parsed = JSON.parse(response);
-      return {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        accessToken: parsed.access_token,
-        refreshToken: parsed.refresh_token,
-      };
-    });
+      body: JSON.stringify(body),
+      contentType: 'application/json',
+    };
+
+    const response = await request(requestOptions);
+    const parsed = JSON.parse(response);
+
+    return {
+      clientId,
+      clientSecret,
+      accessToken: parsed.access_token,
+      refreshToken: parsed.refresh_token,
+    };
   }
 
   async refresh(): Promise<Token> {
