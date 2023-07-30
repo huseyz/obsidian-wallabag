@@ -1,10 +1,10 @@
 {
-  "id": "obsidian-wallabag",
+  "id": "wallabag",
   "name": "Wallabag",
   "version": "0.2.2",
   "minAppVersion": "1.1.0",
-  "description": "Obsidian plugin for importing wallabag articles to Obsidian.",
-  "author": "Huseyin Zengin",
+  "description": "Obsidian plugin for syncing Wallabag articles to Obsidian.",
+  "author": "Hüseyin Zengin",
   "authorUrl": "https://github.com/huseyz",
   "fundingUrl": "",
   "isDesktopOnly": false
