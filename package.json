@@ -1,6 +1,6 @@
 {
   "name": "obsidian-wallabag-plugin",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "This is a plugin for Obsidian (https://obsidian.md) that syncs Wallabag (https://www.wallabag.it/en) articles",
   "main": "main.js",
   "scripts": {
