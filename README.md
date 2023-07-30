@@ -1,7 +1,5 @@
 # Obsidian Wallabag Plugin
 
-**Notice: Right now I have no intention to publish this to the Obsidian plugin galery because I don't see a demand; however if you found this via web search and have any question feel free to open an issue!**
-
 This plugin for [Obsidian](https://obsidian.md) allows you to sync [Wallabag](https://www.wallabag.it/en) items into Obsidian notes in various ways.
 
 ## Authentication
@@ -66,6 +64,7 @@ annotation-target: {{pdf_link}}
 
 - You need Obsidian v1.0.0+ for latest version of plugin
 - Get the [Latest release of the plugin](https://github.com/huseyz/obsidian-wallabag/releases/latest)
-- Extract the folder in the release zip in your vault's plugins folder: `[VAULT]/.obsidian/plugins/`
+- Create a directory for the plugin under you plugins folder, e.g. `[VAULT]/.obsidian/plugins/obsidian-wallabag`
+- Put the release files under that folder
 - Reload Obsidian
 - Make sure Safe Mode is off and the plugins is enabled.
