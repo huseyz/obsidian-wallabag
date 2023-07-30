@@ -1,11 +1,11 @@
 {
-  "id": "obsidian-wallabag-plugin",
+  "id": "obsidian-wallabag",
   "name": "Wallabag",
   "version": "0.2.1",
   "minAppVersion": "1.1.0",
   "description": "Obsidian plugin for importing wallabag articles to Obsidian.",
   "author": "Huseyin Zengin",
-  "authorUrl": "https://github.com/hzenginx",
+  "authorUrl": "https://github.com/huseyz",
   "fundingUrl": "",
   "isDesktopOnly": false
 }
