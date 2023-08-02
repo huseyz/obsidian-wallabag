@@ -2,7 +2,7 @@ import WallabagPlugin from 'main';
 import { Command, Notice } from 'obsidian';
 
 export default class ClearSyncedArticlesCacheCommand implements Command {
-  id = 'wallabag-clear-synced-articles-cache';
+  id = 'clear-synced-articles-cache';
   name = 'Clear synced articles cache';
 
   private plugin: WallabagPlugin;

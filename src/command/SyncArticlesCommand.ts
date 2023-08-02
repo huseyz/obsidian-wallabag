@@ -4,7 +4,7 @@ import { Command, Notice, sanitizeHTMLToDom, normalizePath } from 'obsidian';
 import { WallabagArticle } from 'wallabag/WallabagAPI';
 
 export default class SyncArticlesCommand implements Command {
-  id = 'wallabag-sync-articles';
+  id = 'sync-articles';
   name = 'Sync Wallabag Articles';
 
   private plugin: WallabagPlugin;

@@ -24,7 +24,6 @@ export class WallabagSettingTab extends PluginSettingTab {
 
   display() {
     this.containerEl.empty();
-    this.containerEl.createEl('h2', { text: 'General Settings' });
     ([
       {
         name: 'Server URL',

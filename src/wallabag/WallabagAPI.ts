@@ -62,8 +62,8 @@ export default class WallabagAPI {
       contentType: 'application/json',
     };
 
-    const response = await request(requestOptions);
-    const parsed = JSON.parse(response);
+    const response = await requestUrl(requestOptions);
+    const parsed = response.json();
 
     return {
       clientId,
