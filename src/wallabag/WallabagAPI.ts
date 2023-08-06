@@ -63,7 +63,7 @@ export default class WallabagAPI {
     };
 
     const response = await requestUrl(requestOptions);
-    const parsed = response.json();
+    const parsed = response.json;
 
     return {
       clientId,
