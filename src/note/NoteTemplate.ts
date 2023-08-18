@@ -9,13 +9,14 @@ export default class NoteTemplate {
   }
 
   fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, tagFormat: string, pdfLink = ''): string {
+    const content = wallabagArticle.content !== null ? wallabagArticle.content : '';
     const annotations = wallabagArticle.annotations.map(a => '> ' + a.quote + (a.text ? '\n\n' + a.text : '')).join('\n\n');
     const variables: {[key: string]: string} = {
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
       '{{created_at}}': wallabagArticle.createdAt,
       '{{wallabag_link}}': `${serverBaseUrl}/view/${wallabagArticle.id}`,
-      '{{content}}': convertHtmlToMarkdown === 'true' ? htmlToMarkdown(wallabagArticle.content) : wallabagArticle.content,
+      '{{content}}': convertHtmlToMarkdown === 'true' ? htmlToMarkdown(content) : content,
       '{{pdf_link}}': pdfLink,
       '{{tags}}': this.formatTags(wallabagArticle.tags, tagFormat),
       '{{reading_time}}': wallabagArticle.readingTime,
@@ -23,11 +24,11 @@ export default class NoteTemplate {
       '{{domain_name}}': wallabagArticle.domainName,
       '{{annotations}}': annotations
     };
-    let content = this.content;
+    let noteContent = this.content;
     Object.keys(variables).forEach((key) => {
-      content = content.replaceAll(key, variables[key]);
+      noteContent = noteContent.replaceAll(key, variables[key]);
     });
-    return content;
+    return noteContent;
   }
 
   private formatTags(tags: string[], tagFormat: string): string {
