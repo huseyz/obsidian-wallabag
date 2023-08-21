@@ -37,9 +37,12 @@ By default this plugin offers two builtin templates; one for inserting the conte
 You can use a custom template, in that case plugin will pass the following variables.
 | Variable | Description |
 |:----------------|:-------------------------------------------------------------------------------------------------------------------|
+| `id` | Wallabag ID of the article (Useful for scripting) |
 | `article_title` | Title of the article |
 | `original_link` | Link to the source article |
 | `created_at` | Creation date of the article in Wallabag |
+| `published_at` | When the article was originally published according to Wallabag |
+| `updated_at` | Last modification date of the article in Wallabag <sub><br>Wallabag API seems not to change this field when modifying annotations.</sub> |
 | `wallabag_link` | Link to the article in Wallabag |
 | `content` | HTML content extracted by wallabag |
 | `pdf_link` | An Obsidian wikilink to the exported pdf file. <sub><br> Only populated if the PDF export option is choosen.</sub> |
