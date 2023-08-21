@@ -11,7 +11,7 @@ You can follow the Wallabag's [iOS Setup guide](https://doc.wallabag.org/en/apps
 
 This plugin fulfills a qiute straightforward purpose; it syncs Wallabag articles and creates notes from them in various possible formats.
 
-Use the command "Sync Wallabag Articles" to sync new articles. Plugin will keep a track of items synced so if you delete a created note, it won't be generated again unless you use the command "Clear synced articles cache" to reset the plugin cache.
+Use the command "Sync Wallabag Articles" to sync new articles. Plugin will keep a track of items synced so if you delete a created note, it won't be generated again unless you use the command "Clear synced articles cache" to reset the plugin cache. There is also a "Delete note and remove it from synced articles cache" command to remove an individual note from both the file system and synced article cache. This is useful to fetch any changes you made to the note in Wallabag (such as tags and annotations).
 
 There are various settings under the plugin settings you can use to personalize your workflow, here are some important ones:
 
@@ -37,12 +37,12 @@ By default this plugin offers two builtin templates; one for inserting the conte
 You can use a custom template, in that case plugin will pass the following variables.
 | Variable | Description |
 |:----------------|:-------------------------------------------------------------------------------------------------------------------|
-| `id` | Wallabag ID of the article (Useful for scripting) |
+| `id` | Wallabag ID of the article <sub><br>Add this to your notes frontmatter using the `wallabag_id` key to make use of the 'Delete note and remove it from synced articles cache' command. </sub> |
 | `article_title` | Title of the article |
 | `original_link` | Link to the source article |
 | `created_at` | Creation date of the article in Wallabag |
 | `published_at` | When the article was originally published according to Wallabag |
-| `updated_at` | Last modification date of the article in Wallabag <sub><br>Wallabag API seems not to change this field when modifying annotations.</sub> |
+| `updated_at` | Last modification date of the article in Wallabag RemoveCurrentFromSyncedArticlesCacheCommand |
 | `wallabag_link` | Link to the article in Wallabag |
 | `content` | HTML content extracted by wallabag |
 | `pdf_link` | An Obsidian wikilink to the exported pdf file. <sub><br> Only populated if the PDF export option is choosen.</sub> |
