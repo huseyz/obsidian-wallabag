@@ -19,6 +19,8 @@ export interface WallabagArticle {
   url: string,
   content: string,
   createdAt: string,
+  publishedAt: string;
+  updatedAt: string;
   readingTime: string,
   previewPicture: string,
   domainName: string
@@ -98,6 +100,8 @@ export default class WallabagAPI {
       url: article['url'],
       content: article['content'],
       createdAt: article['created_at'],
+      updatedAt: article['updated_at'],
+      publishedAt: article['published_at'],
       readingTime: article['reading_time'],
       previewPicture: article['preview_picture'],
       domainName: article['domain_name'],

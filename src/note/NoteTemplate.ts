@@ -11,9 +11,12 @@ export default class NoteTemplate {
   fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, tagFormat: string, pdfLink = ''): string {
     const annotations = wallabagArticle.annotations.map(a => '> ' + a.quote + (a.text ? '\n\n' + a.text : '')).join('\n\n');
     const variables: {[key: string]: string} = {
+      '{{id}}': wallabagArticle.id.toString(),
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
       '{{created_at}}': wallabagArticle.createdAt,
+      '{{published_at}}': wallabagArticle.publishedAt,
+      '{{updated_at}}': wallabagArticle.updatedAt,
       '{{wallabag_link}}': `${serverBaseUrl}/view/${wallabagArticle.id}`,
       '{{content}}': convertHtmlToMarkdown === 'true' ? htmlToMarkdown(wallabagArticle.content) : wallabagArticle.content,
       '{{pdf_link}}': pdfLink,
