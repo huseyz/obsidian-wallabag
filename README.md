@@ -62,9 +62,26 @@ annotation-target: {{pdf_link}}
 
 ### Manually
 
-- You need Obsidian v1.0.0+ for latest version of plugin
-- Get the [Latest release of the plugin](https://github.com/huseyz/obsidian-wallabag/releases/latest)
-- Create a directory for the plugin under you plugins folder, e.g. `[VAULT]/.obsidian/plugins/obsidian-wallabag`
-- Put the release files under that folder
-- Reload Obsidian
+- You need Obsidian v1.0.0+ for latest version of plugin.
+- Get the [Latest release of the plugin](https://github.com/huseyz/obsidian-wallabag/releases/latest).
+- Create a directory for the plugin under you plugins folder, e.g. `[VAULT]/.obsidian/plugins/obsidian-wallabag`.
+- Put the release files under that folder.
+- Reload Obsidian.
 - Make sure Safe Mode is off and the plugins is enabled.
+
+## Development
+
+### Workflow
+
+- `npm install`.
+- `npm run build`.
+- Copy `main.js` and `manifest.json` (if changed) to your obsidian vault's plugin folder (e.g. `[VAULT]/.obsidian/plugins/obsidian-wallabag`).
+- Disable and re-enable the plugin in Obsidian's settings to reload it.
+
+### State
+
+Relative to `[VAULT]/.obsidian/plugins/obsidian-wallabag`:
+
+- `.synced`: List of all id's that have already been downloaded. Plugin will not attempt to download these articles again until cleared.
+- `.__wallabag_token__`: Authentication credentials for Wallabag.
+
