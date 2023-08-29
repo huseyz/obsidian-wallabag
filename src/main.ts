@@ -1,3 +1,4 @@
+import DeleteNoteAndRemoveFromSyncedCacheCommand from 'command/DeleteNoteAndRemoveFromSyncedCacheCommand';
 import ClearSyncedArticlesCacheCommand from 'command/ResetSyncedArticlesCacheCommand';
 import SyncArticlesCommand from 'command/SyncArticlesCommand';
 import { Notice, Plugin } from 'obsidian';
@@ -19,6 +20,7 @@ export default class WallabagPlugin extends Plugin {
     this.addSettingTab(new WallabagSettingTab(this.app, this, _ => this.authenticated));
     this.addCommand(syncArticlesCommand);
     this.addCommand(new ClearSyncedArticlesCacheCommand(this));
+    this.addCommand(new DeleteNoteAndRemoveFromSyncedCacheCommand(this));
 
     if (this.settings.syncOnStartup === 'true') {
       syncArticlesCommand.callback();
