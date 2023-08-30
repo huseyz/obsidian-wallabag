@@ -69,7 +69,7 @@ export class WallabagSettingTab extends PluginSettingTab {
 
     new Setting(this.containerEl)
       .setName('Sync archived articles')
-      .setDesc('If enabled, archived articles will be synced.')
+      .setDesc('If enabled, archived articles will also be synced.')
       .addToggle(async (toggle) => {
         toggle
           .setValue(this.plugin.settings.syncArchived === 'true')

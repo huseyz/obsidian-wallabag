@@ -60,7 +60,7 @@ export default class SyncArticlesCommand implements Command {
 
     const fetchNotice = new Notice('Syncing from Wallabag..');
 
-    const articles = await this.plugin.api.fetchArticles(this.plugin.settings.syncArchived === 'true' ? 1 : 0);
+    const articles = await this.plugin.api.fetchArticles(this.plugin.settings.syncArchived === 'true' ? true : false);
     const newIds = await Promise.all(articles
       .filter((article) => !previouslySynced.contains(article.id))
       .map(async (article) => {
