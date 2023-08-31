@@ -25,7 +25,9 @@ export default class NoteTemplate {
       '{{reading_time}}': wallabagArticle.readingTime,
       '{{preview_picture}}': wallabagArticle.previewPicture,
       '{{domain_name}}': wallabagArticle.domainName,
-      '{{annotations}}': annotations
+      '{{annotations}}': annotations,
+      '{{is_archived}}': wallabagArticle.isArchived ? 'true' : 'false',
+      '{{is_starred}}': wallabagArticle.isStarred ? 'true' : 'false',
     };
     let noteContent = this.content;
     Object.keys(variables).forEach((key) => {

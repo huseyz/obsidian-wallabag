@@ -21,7 +21,10 @@ There are various settings under the plugin settings you can use to personalize 
 | Article Notes Folder                                   | Define the folder you want synced notes will be created. If empty notes will be created at the vault root.          |
 | Article Note Template                                  | Use to pass a custom template for notes. See the [Templating](#templating) for more details.                        |
 | Sync on startup                                        | If enabled, articles will be synced on startup.                                                                     |
-| Sync archived articles                                 | If enabled, archived articles will also be synced.                                                                  |
+| Sync unread articles                                   | If enabled, unread articles will be synced.                                                                         |
+| Wallabag unread article notes folder location          | (optional) Choose the location where the unread synced article notes will be created.                               |
+| Sync archived articles                                 | If enabled, archived articles will be synced.                                                                       |
+| Wallabag archived article notes folder location        | (optional) Choose the location where the archived synced article notes will be created.                             |
 | Export as PDF                                          | If enabled synced articles will be exported as PDFs.                                                                |
 | Convert HTML Content extracted by Wallabag to Markdown | If enabled the content of the Wallabag article will be converted to markdown before being used for the new article. |
 | Archive article after sync                             | If enabled the article will be archived after being synced.                                                         |
@@ -50,6 +53,8 @@ You can use a custom template, in that case plugin will pass the following varia
 | `reading_time` | Reading time of the article |
 | `preview_picture` | link to preview picture of the article |
 | `domain_name` | Link to the source domain article |
+| `is_archived` | Whether the article is archived or not |
+| `is_starred` | Whether the article is starred or not |
 
 I mainly use the template to export pdfs and use [Annotator]() to read using the following template.
 

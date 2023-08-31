@@ -23,8 +23,10 @@ export interface WallabagArticle {
   updatedAt: string;
   readingTime: string,
   previewPicture: string,
-  domainName: string
+  domainName: string,
   annotations: WallabagAnnotation[]
+  isArchived: boolean,
+  isStarred: boolean
 }
 
 export interface WallabagArticlesResponse {
@@ -106,6 +108,8 @@ export default class WallabagAPI {
       previewPicture: article['preview_picture'],
       domainName: article['domain_name'],
       annotations: article['annotations'],
+      isArchived: article['is_archived'],
+      isStarred: article['is_starred']
     };
   }
 
@@ -145,15 +149,25 @@ export default class WallabagAPI {
     });
   }
 
-  async fetchArticles(syncArchivedArticles = false, page = 1, results: WallabagArticle[] = []): Promise<WallabagArticle[]> {
-    const archiveParam = syncArchivedArticles ? '' : '&archive=0';
+  private getArchiveParam(syncUnReadArticles: boolean, syncArchivedArticles: boolean): string {
+    if (syncUnReadArticles && !syncArchivedArticles) {
+      return '&archive=0';
+    } else if (!syncUnReadArticles && syncArchivedArticles) {
+      return '&archive=1';
+    } else {
+      return '';
+    }
+  }
+
+  async fetchArticles(syncUnReadArticles = true, syncArchivedArticles = false, page = 1, results: WallabagArticle[] = []): Promise<WallabagArticle[]> {
+    const archiveParam = this.getArchiveParam(syncUnReadArticles, syncArchivedArticles);
     const url = `${this.plugin.settings.serverUrl}/api/entries.json?page=${page}&tags=${this.plugin.settings.tag}${archiveParam}`;
     return this.tokenRefreshingFetch(url).then((value) => {
       const response = this.convertWallabagArticlesResponse(value);
       if (response.pages === response.page) {
         return [...results, ...response.articles];
       } else {
-        return this.fetchArticles(syncArchivedArticles, page+1, [...results, ...response.articles]);
+        return this.fetchArticles(syncUnReadArticles, syncArchivedArticles, page+1, [...results, ...response.articles]);
       }
     });
   }

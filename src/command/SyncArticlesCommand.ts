@@ -33,6 +33,16 @@ export default class SyncArticlesCommand implements Command {
     return new NoteTemplate(template);
   }
 
+  private getFolder(wallabagArticle: WallabagArticle): string {
+    if (wallabagArticle.isArchived && this.plugin.settings.archivedFolder !== '') {
+      return this.plugin.settings.archivedFolder;
+    } else if (!wallabagArticle.isArchived && this.plugin.settings.unreadFolder !== '') {
+      return this.plugin.settings.unreadFolder;
+    } else {
+      return this.plugin.settings.folder;
+    }
+  }
+
   private getFilename(wallabagArticle: WallabagArticle): string {
     const filename = wallabagArticle.title.replaceAll(/[\\,#%&{}/*<>$"@.?]/g, ' ').replaceAll(/[:|]/g, ' ');
     if (this.plugin.settings.idInTitle === 'true') {
@@ -60,13 +70,14 @@ export default class SyncArticlesCommand implements Command {
 
     const fetchNotice = new Notice('Syncing from Wallabag..');
 
-    const articles = await this.plugin.api.fetchArticles(this.plugin.settings.syncArchived === 'true' ? true : false);
+    const articles = await this.plugin.api.fetchArticles(this.plugin.settings.syncUnRead === 'true' ? true : false, this.plugin.settings.syncArchived === 'true' ? true : false);
     const newIds = await Promise.all(articles
       .filter((article) => !previouslySynced.contains(article.id))
       .map(async (article) => {
+        const folder = this.getFolder(article);
         if (this.plugin.settings.downloadAsPDF !== 'true') {
           const template = this.plugin.settings.articleTemplate === '' ? DefaultTemplate : await this.getUserTemplate();
-          const filename = normalizePath(`${this.plugin.settings.folder}/${this.getFilename(article)}.md`);
+          const filename = normalizePath(`${folder}/${this.getFilename(article)}.md`);
           const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.convertHtmlToMarkdown, this.plugin.settings.tagFormat);
           await this.createNoteIfNotExists(filename, content);
         } else {
@@ -75,7 +86,7 @@ export default class SyncArticlesCommand implements Command {
           await this.plugin.app.vault.adapter.writeBinary(pdfFilename, pdf);
           if (this.plugin.settings.createPDFNote) {
             const template = this.plugin.settings.articleTemplate === '' ? PDFTemplate : await this.getUserTemplate();
-            const filename = normalizePath(`${this.plugin.settings.folder}/${this.getFilename(article)}.md`);
+            const filename = normalizePath(`${folder}/${this.getFilename(article)}.md`);
             const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.tagFormat, pdfFilename);
             await this.createNoteIfNotExists(filename, content);
           }
