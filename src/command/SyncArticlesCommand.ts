@@ -65,7 +65,11 @@ export default class SyncArticlesCommand implements Command {
     if (!this.plugin.authenticated) {
       new Notice('Please authenticate with Wallabag first.');
       return;
+    } else if (this.plugin.settings.syncUnRead === 'false' && this.plugin.settings.syncArchived === 'false') {
+      new Notice('Please select at least one type of article to sync.');
+      return;
     }
+
     const previouslySynced = await this.readSynced();
 
     const fetchNotice = new Notice('Syncing from Wallabag..');
