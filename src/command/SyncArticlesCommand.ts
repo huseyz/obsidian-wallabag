@@ -1,7 +1,14 @@
 import WallabagPlugin from 'main';
-import NoteTemplate, { DefaultTemplate, PDFTemplate } from 'note/NoteTemplate';
-import { Command, Notice, sanitizeHTMLToDom, normalizePath } from 'obsidian';
-import { WallabagArticle } from 'wallabag/WallabagAPI';
+import NoteTemplate, {DefaultTemplate, PDFTemplate} from 'note/NoteTemplate';
+import {
+  Command,
+  Notice,
+  sanitizeHTMLToDom,
+  normalizePath,
+  TFile,
+  parseFrontMatterTags
+} from 'obsidian';
+import {WallabagArticle} from 'wallabag/WallabagAPI';
 
 export default class SyncArticlesCommand implements Command {
   id = 'sync-articles';
@@ -52,12 +59,22 @@ export default class SyncArticlesCommand implements Command {
     }
   }
 
-  private async createNoteIfNotExists(filename: string, content: string) {
+  private async createOrModifyNote(filename: string, content: string, article: WallabagArticle, previouslySynced: number[]) {
     const exists = await this.plugin.app.vault.adapter.exists(filename);
+    const note = this.plugin.app.vault.getAbstractFileByPath(filename);
     if (exists) {
-      new Notice(`File ${filename} already exists. Skipping..`);
+      if (note instanceof TFile) {
+        // if note contains a special marker tag - don't replace it
+        const cmeta = this.plugin.app.metadataCache.getFileCache(note);
+        if ((!cmeta?.tags?.find(t => t.tag === '#wallaSave')) && (!parseFrontMatterTags(cmeta?.frontmatter)?.find((t: string) => t === '#wallaSave'))) {
+          await this.plugin.app.vault.modify(note, content);
+        }
+      }
     } else {
-      this.plugin.app.vault.create(filename, content);
+      // if the note was synced previously, don't recreate it
+      if (!previouslySynced.contains(article.id)) {
+        await this.plugin.app.vault.create(filename, content);
+      }
     }
   }
 
@@ -76,14 +93,14 @@ export default class SyncArticlesCommand implements Command {
 
     const articles = await this.plugin.api.fetchArticles(this.plugin.settings.syncUnRead === 'true' ? true : false, this.plugin.settings.syncArchived === 'true' ? true : false);
     const newIds = await Promise.all(articles
-      .filter((article) => !previouslySynced.contains(article.id))
+    // .filter((article) => !previouslySynced.contains(article.id))
       .map(async (article) => {
         const folder = this.getFolder(article);
         if (this.plugin.settings.downloadAsPDF !== 'true') {
           const template = this.plugin.settings.articleTemplate === '' ? DefaultTemplate : await this.getUserTemplate();
           const filename = normalizePath(`${folder}/${this.getFilename(article)}.md`);
           const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.convertHtmlToMarkdown, this.plugin.settings.tagFormat);
-          await this.createNoteIfNotExists(filename, content);
+          await this.createOrModifyNote(filename, content, article, previouslySynced);
         } else {
           const pdfFilename = normalizePath(`${this.plugin.settings.pdfFolder}/${this.getFilename(article)}.pdf`);
           const pdf = await this.plugin.api.exportArticle(article.id);
@@ -92,7 +109,7 @@ export default class SyncArticlesCommand implements Command {
             const template = this.plugin.settings.articleTemplate === '' ? PDFTemplate : await this.getUserTemplate();
             const filename = normalizePath(`${folder}/${this.getFilename(article)}.md`);
             const content = template.fill(article, this.plugin.settings.serverUrl, this.plugin.settings.tagFormat, pdfFilename);
-            await this.createNoteIfNotExists(filename, content);
+            await this.createOrModifyNote(filename, content, article, previouslySynced);
           }
         }
         if (this.plugin.settings.archiveAfterSync === 'true') {
