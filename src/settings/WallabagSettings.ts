@@ -11,7 +11,10 @@ export interface WallabagSettings {
   archiveAfterSync: string;
   syncOnStartup: string;
   syncArchived: string;
+  syncUnRead: string;
   tagFormat: string;
+  unreadFolder: string;
+  archivedFolder: string;
 }
 
 export const DEFAULT_SETTINGS: WallabagSettings = {
@@ -27,5 +30,8 @@ export const DEFAULT_SETTINGS: WallabagSettings = {
   archiveAfterSync: 'false',
   syncOnStartup: 'false',
   syncArchived: 'false',
+  syncUnRead: 'true',
   tagFormat: 'csv',
+  unreadFolder: '',
+  archivedFolder: '',
 };

@@ -33,7 +33,7 @@ export class WallabagSettingTab extends PluginSettingTab {
       },
       {
         name: 'Tag to sync',
-        desc: 'If set, only articles with the this tag will be synced.',
+        desc: 'If set, only articles with this tag will be synced.',
         get: () => this.plugin.settings.tag,
         set: this.updateSetting('tag')
       },
@@ -54,6 +54,8 @@ export class WallabagSettingTab extends PluginSettingTab {
       },
     ] as TextSetting[]).forEach(this.addTextSettingHere);
 
+    this.containerEl.createEl('h2', { text: 'Sync Behavior' });
+
     new Setting(this.containerEl)
       .setName('Sync on startup')
       .setDesc('If enabled, articles will be synced on startup.')
@@ -68,8 +70,31 @@ export class WallabagSettingTab extends PluginSettingTab {
       });
 
     new Setting(this.containerEl)
+      .setName('Sync unread articles')
+      .setDesc('If enabled, unread articles will be synced.')
+      .addToggle(async (toggle) => {
+        toggle
+          .setValue(this.plugin.settings.syncUnRead === 'true')
+          .onChange(async (value) => {
+            this.plugin.settings.syncUnRead = String(value);
+            await this.plugin.saveSettings();
+            this.display();
+          });
+      });
+
+    this.addTextSettingHere({
+      name: 'Wallabag unread article notes folder location',
+      desc: sanitizeHTMLToDom(
+        '(optional) Choose the location where the unread synced article notes will be created.<br>' +
+        'If not specified, the article notes folder will be used.'
+      ),
+      get: () => this.plugin.settings.unreadFolder,
+      set: this.updateSetting('unreadFolder')
+    });
+
+    new Setting(this.containerEl)
       .setName('Sync archived articles')
-      .setDesc('If enabled, archived articles will also be synced.')
+      .setDesc('If enabled, archived articles will be synced.')
       .addToggle(async (toggle) => {
         toggle
           .setValue(this.plugin.settings.syncArchived === 'true')
@@ -79,6 +104,70 @@ export class WallabagSettingTab extends PluginSettingTab {
             this.display();
           });
       });
+
+    this.addTextSettingHere({
+      name: 'Wallabag archived article notes folder location',
+      desc: sanitizeHTMLToDom(
+        '(optional) Choose the location where the archived synced article notes will be created.<br>' +
+        'If not specified, the article notes folder will be used.'
+      ),
+      get: () => this.plugin.settings.archivedFolder,
+      set: this.updateSetting('archivedFolder')
+    });
+
+    new Setting(this.containerEl)
+      .setName('Archive article after sync')
+      .setDesc('If enabled the article will be archived after being synced.')
+      .addToggle(async (toggle) => {
+        toggle.setValue(this.plugin.settings.archiveAfterSync === 'true');
+        toggle.onChange(async (value) => {
+          this.plugin.settings.archiveAfterSync = String(value);
+          await this.plugin.saveSettings();
+        });
+      });
+
+    this.containerEl.createEl('h2', { text: 'Obsidian note creation' });
+
+    new Setting(this.containerEl)
+      .setName('Convert HTML Content extracted by Wallabag to Markdown')
+      .setDesc('If enabled the content of the Wallabag article will be converted to markdown before being used for the new article.')
+      .addToggle(async (toggle) => {
+        toggle.setValue(this.plugin.settings.convertHtmlToMarkdown === 'true');
+        toggle.onChange(async (value) => {
+          this.plugin.settings.convertHtmlToMarkdown = String(value);
+          await this.plugin.saveSettings();
+        });
+      });
+
+    new Setting(this.containerEl)
+      .setName('Add article ID in the title')
+      .setDesc('If enabled the article ID will be added to title.')
+      .addToggle(async (toggle) => {
+        toggle.setValue(this.plugin.settings.idInTitle === 'true');
+        toggle.onChange(async (value) => {
+          this.plugin.settings.idInTitle = String(value);
+          await this.plugin.saveSettings();
+        });
+      });
+
+    new Setting(this.containerEl)
+      .setName('Tag format')
+      .setDesc(sanitizeHTMLToDom(
+        'Determines how the tags will be populated in the created note. <br>' +
+        'CSV: Comma-separeted tags e.g. <code>tag1, tag2, tag3</code> <br>' +
+        'Hashtags: Space-separeted hashtags<code>#tag1 #tag2 #tag3</code> <br>'
+      ))
+      .addDropdown(async (dropdown) => {
+        dropdown.addOption('csv', 'CSV');
+        dropdown.addOption('hashtag', 'Hashtags');
+        dropdown.setValue(this.plugin.settings.tagFormat);
+        dropdown.onChange(async (value) => {
+          this.plugin.settings.tagFormat = value;
+          await this.plugin.saveSettings();
+        });
+      });
+
+    this.containerEl.createEl('h2', { text: 'Export as PDF' });
 
     new Setting(this.containerEl)
       .setName('Export as PDF')
@@ -115,54 +204,6 @@ export class WallabagSettingTab extends PluginSettingTab {
         });
       });
 
-    new Setting(this.containerEl)
-      .setName('Convert HTML Content extracted by Wallabag to Markdown')
-      .setDesc('If enabled the content of the Wallabag article will be converted to markdown before being used for the new article.')
-      .addToggle(async (toggle) => {
-        toggle.setValue(this.plugin.settings.convertHtmlToMarkdown === 'true');
-        toggle.onChange(async (value) => {
-          this.plugin.settings.convertHtmlToMarkdown = String(value);
-          await this.plugin.saveSettings();
-        });
-      });
-
-    new Setting(this.containerEl)
-      .setName('Archive article after sync')
-      .setDesc('If enabled the article will be archived after being synced.')
-      .addToggle(async (toggle) => {
-        toggle.setValue(this.plugin.settings.archiveAfterSync === 'true');
-        toggle.onChange(async (value) => {
-          this.plugin.settings.archiveAfterSync = String(value);
-          await this.plugin.saveSettings();
-        });
-      });
-
-    new Setting(this.containerEl)
-      .setName('Add article ID in the title')
-      .setDesc('If enabled the article ID will be added to title.')
-      .addToggle(async (toggle) => {
-        toggle.setValue(this.plugin.settings.idInTitle === 'true');
-        toggle.onChange(async (value) => {
-          this.plugin.settings.idInTitle = String(value);
-          await this.plugin.saveSettings();
-        });
-      });
-    new Setting(this.containerEl)
-      .setName('Tag format')
-      .setDesc(sanitizeHTMLToDom(
-        'Determines how the tags will be populated in the created note. <br>' +
-        'CSV: Comma-separeted tags e.g. <code>tag1, tag2, tag3</code> <br>' +
-        'Hashtags: Space-separeted hashtags<code>#tag1 #tag2 #tag3</code> <br>'
-      ))
-      .addDropdown(async (dropdown) => {
-        dropdown.addOption('csv', 'CSV');
-        dropdown.addOption('hashtag', 'Hashtags');
-        dropdown.setValue(this.plugin.settings.tagFormat);
-        dropdown.onChange(async (value) => {
-          this.plugin.settings.tagFormat = value;
-          await this.plugin.saveSettings();
-        });
-      });
     this.authenticationSettings();
   }
 
