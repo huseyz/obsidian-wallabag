@@ -7,8 +7,7 @@
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
-    "lint": "eslint ./src",
-    "format": "eslint --fix ./src"
+    "lint": "eslint ./src"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +20,9 @@
     "esbuild": "^0.15.0",
     "esbuild-plugin-eslint": "^0.1.1",
     "eslint": "^8.30.0",
+    "eslint-config-prettier": "^9.1.0",
     "obsidian": "latest",
+    "prettier": "3.2.1",
     "tslib": "2.4.0",
     "typescript": "4.7.4"
   }

@@ -19,5 +19,4 @@ export default class ClearSyncedArticlesCacheCommand implements Command {
     notice.hide();
     new Notice('Synced articles cache is cleared.');
   }
-
 }

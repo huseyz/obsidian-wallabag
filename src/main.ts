@@ -17,7 +17,7 @@ export default class WallabagPlugin extends Plugin {
 
     const syncArticlesCommand = new SyncArticlesCommand(this);
 
-    this.addSettingTab(new WallabagSettingTab(this.app, this, _ => this.authenticated));
+    this.addSettingTab(new WallabagSettingTab(this.app, this, (_) => this.authenticated));
     this.addCommand(syncArticlesCommand);
     this.addCommand(new ClearSyncedArticlesCacheCommand(this));
     this.addCommand(new DeleteNoteAndRemoveFromSyncedCacheCommand(this));

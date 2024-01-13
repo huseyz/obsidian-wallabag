@@ -10,8 +10,8 @@ export default class NoteTemplate {
 
   fill(wallabagArticle: WallabagArticle, serverBaseUrl: string, convertHtmlToMarkdown: string, tagFormat: string, pdfLink = ''): string {
     const content = wallabagArticle.content !== null ? wallabagArticle.content : '';
-    const annotations = wallabagArticle.annotations.map(a => '> ' + a.quote + (a.text ? '\n\n' + a.text : '')).join('\n\n');
-    const variables: {[key: string]: string} = {
+    const annotations = wallabagArticle.annotations.map((a) => '> ' + a.quote + (a.text ? '\n\n' + a.text : '')).join('\n\n');
+    const variables: { [key: string]: string } = {
       '{{id}}': wallabagArticle.id.toString(),
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
@@ -38,9 +38,12 @@ export default class NoteTemplate {
 
   private formatTags(tags: string[], tagFormat: string): string {
     switch (tagFormat) {
-    case 'csv': return tags.join(', ');
-    case 'hashtag': return tags.map(tag => `#${tag}`).join(' ');
-    default: return '';
+    case 'csv':
+      return tags.join(', ');
+    case 'hashtag':
+      return tags.map((tag) => `#${tag}`).join(' ');
+    default:
+      return '';
     }
   }
 }

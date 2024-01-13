@@ -3,36 +3,36 @@ import { request, requestUrl, RequestUrlResponse } from 'obsidian';
 import { Token } from './WallabagAuth';
 
 interface WallabagAnnotation {
-  user: string,
-  annotator_schema_version: string,
-  id: number,
-  text: string,
-  created_at: string,
-  updated_at: string,
-  quote: string,
+  user: string;
+  annotator_schema_version: string;
+  id: number;
+  text: string;
+  created_at: string;
+  updated_at: string;
+  quote: string;
 }
 
 export interface WallabagArticle {
-  id: number,
-  tags: string[],
-  title: string,
-  url: string,
-  content: string,
-  createdAt: string,
+  id: number;
+  tags: string[];
+  title: string;
+  url: string;
+  content: string;
+  createdAt: string;
   publishedAt: string;
   updatedAt: string;
-  readingTime: string,
-  previewPicture: string,
-  domainName: string,
-  annotations: WallabagAnnotation[]
-  isArchived: boolean,
-  isStarred: boolean
+  readingTime: string;
+  previewPicture: string;
+  domainName: string;
+  annotations: WallabagAnnotation[];
+  isArchived: boolean;
+  isStarred: boolean;
 }
 
 export interface WallabagArticlesResponse {
-  page: number,
-  pages: number,
-  articles: WallabagArticle[]
+  page: number;
+  pages: number;
+  articles: WallabagArticle[];
 }
 
 export default class WallabagAPI {
@@ -44,19 +44,13 @@ export default class WallabagAPI {
     this.token = token;
   }
 
-  static async authenticate(
-    serverUrl: string,
-    clientId: string,
-    clientSecret: string,
-    username: string,
-    password: string
-  ): Promise<Token> {
+  static async authenticate(serverUrl: string, clientId: string, clientSecret: string, username: string, password: string): Promise<Token> {
     const body = {
       grant_type: 'password',
       client_id: clientId,
       client_secret: clientSecret,
       username,
-      password
+      password,
     };
 
     const requestOptions = {
@@ -95,9 +89,10 @@ export default class WallabagAPI {
   }
 
   private convertWallabagArticle(article: any) {
+    const getTag = (tag: any) => (tag['slug'].startsWith('t:') ? tag['slug'].substring(2) : tag['slug']);
     return {
       id: article['id'],
-      tags: article['tags'].map((tag: any) => tag['slug']),
+      tags: article['tags'].map(getTag),
       title: article['title'],
       url: article['url'],
       content: article['content'],
@@ -109,7 +104,7 @@ export default class WallabagAPI {
       domainName: article['domain_name'],
       annotations: article['annotations'],
       isArchived: article['is_archived'],
-      isStarred: article['is_starred']
+      isStarred: article['is_starred'],
     };
   }
 
@@ -117,7 +112,7 @@ export default class WallabagAPI {
     return {
       page: response.json['page'],
       pages: response.json['pages'],
-      articles: response.json['_embedded']['items'].map(this.convertWallabagArticle)
+      articles: response.json['_embedded']['items'].map(this.convertWallabagArticle),
     };
   }
 
@@ -125,23 +120,25 @@ export default class WallabagAPI {
     return requestUrl({
       url: url,
       headers: {
-        'Authorization': `Bearer ${this.token.accessToken}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${this.token.accessToken}`,
+        'Content-Type': 'application/json',
       },
       method: method ? method : 'GET',
-      body: body
+      body: body,
     }).catch(async (reason) => {
       if (reason.status === 401) {
         console.log('Likely the token expired, refreshing it.');
-        return await this.refresh().then(async (token) => {
-          this.token = token;
-          await this.plugin.onAuthenticated(this.token);
-          return this.tokenRefreshingFetch(url);
-        }).catch(async (reason) => {
-          console.log('Token refresh failed.', reason);
-          await this.plugin.onTokenRefreshFailed();
-          throw new Error('');
-        });
+        return await this.refresh()
+          .then(async (token) => {
+            this.token = token;
+            await this.plugin.onAuthenticated(this.token);
+            return this.tokenRefreshingFetch(url);
+          })
+          .catch(async (reason) => {
+            console.log('Token refresh failed.', reason);
+            await this.plugin.onTokenRefreshFailed();
+            throw new Error('');
+          });
       } else {
         console.log(`Something else failed ${reason}`);
         throw new Error('');
@@ -159,7 +156,12 @@ export default class WallabagAPI {
     }
   }
 
-  async fetchArticles(syncUnReadArticles = true, syncArchivedArticles = false, page = 1, results: WallabagArticle[] = []): Promise<WallabagArticle[]> {
+  async fetchArticles(
+    syncUnReadArticles = true,
+    syncArchivedArticles = false,
+    page = 1,
+    results: WallabagArticle[] = []
+  ): Promise<WallabagArticle[]> {
     const archiveParam = this.getArchiveParam(syncUnReadArticles, syncArchivedArticles);
     const url = `${this.plugin.settings.serverUrl}/api/entries.json?page=${page}&tags=${this.plugin.settings.tag}${archiveParam}`;
     return this.tokenRefreshingFetch(url).then((value) => {
@@ -167,7 +169,7 @@ export default class WallabagAPI {
       if (response.pages === response.page) {
         return [...results, ...response.articles];
       } else {
-        return this.fetchArticles(syncUnReadArticles, syncArchivedArticles, page+1, [...results, ...response.articles]);
+        return this.fetchArticles(syncUnReadArticles, syncArchivedArticles, page + 1, [...results, ...response.articles]);
       }
     });
   }
@@ -183,5 +185,4 @@ export default class WallabagAPI {
     const url = `${this.plugin.settings.serverUrl}/api/entries/${id}`;
     return this.tokenRefreshingFetch(url, 'PATCH', JSON.stringify({ archive: 1 }));
   }
-
 }
