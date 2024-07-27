@@ -43,7 +43,7 @@ You can use a custom template, in that case plugin will pass the following varia
 | `id` | Wallabag ID of the article <sub><br>Add this to your notes frontmatter using the `wallabag_id` key to make use of the 'Delete note and remove it from synced articles cache' command. </sub> |
 | `article_title` | Title of the article |
 | `original_link` | Link to the source article |
-| `given_link` | Given link to the source page |
+| `given_url` | Given link to the source page |
 | `created_at` | Creation date of the article in Wallabag |
 | `published_at` | When the article was originally published according to Wallabag |
 | `updated_at` | Last modification date of the article in Wallabag RemoveCurrentFromSyncedArticlesCacheCommand |
