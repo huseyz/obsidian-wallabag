@@ -27,6 +27,7 @@ export interface WallabagArticle {
   annotations: WallabagAnnotation[];
   isArchived: boolean;
   isStarred: boolean;
+  givenUrl: string;
 }
 
 export interface WallabagArticlesResponse {
@@ -105,6 +106,7 @@ export default class WallabagAPI {
       annotations: article['annotations'],
       isArchived: article['is_archived'],
       isStarred: article['is_starred'],
+      givenUrl: article['given_url']
     };
   }
 

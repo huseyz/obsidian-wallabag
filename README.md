@@ -43,6 +43,7 @@ You can use a custom template, in that case plugin will pass the following varia
 | `id` | Wallabag ID of the article <sub><br>Add this to your notes frontmatter using the `wallabag_id` key to make use of the 'Delete note and remove it from synced articles cache' command. </sub> |
 | `article_title` | Title of the article |
 | `original_link` | Link to the source article |
+| `given_link` | Given link to the source page |
 | `created_at` | Creation date of the article in Wallabag |
 | `published_at` | When the article was originally published according to Wallabag |
 | `updated_at` | Last modification date of the article in Wallabag RemoveCurrentFromSyncedArticlesCacheCommand |
@@ -56,7 +57,7 @@ You can use a custom template, in that case plugin will pass the following varia
 | `is_archived` | Whether the article is archived or not |
 | `is_starred` | Whether the article is starred or not |
 
-I mainly use the template to export pdfs and use [Annotator]() to read using the following template.
+I mainly use this plugin to export articles as pdfs and use [Annotator](https://github.com/elias-sundqvist/obsidian-annotator) to read using the following template.
 
 ```
 ---

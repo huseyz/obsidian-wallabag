@@ -15,6 +15,7 @@ export default class NoteTemplate {
       '{{id}}': wallabagArticle.id.toString(),
       '{{article_title}}': wallabagArticle.title,
       '{{original_link}}': wallabagArticle.url,
+      '{{given_url}}': wallabagArticle.givenUrl,
       '{{created_at}}': wallabagArticle.createdAt,
       '{{published_at}}': wallabagArticle.publishedAt,
       '{{updated_at}}': wallabagArticle.updatedAt,
