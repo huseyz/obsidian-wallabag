@@ -9,7 +9,7 @@ You can follow the Wallabag's [iOS Setup guide](https://doc.wallabag.org/en/apps
 
 ## Usage
 
-This plugin fulfills a qiute straightforward purpose; it syncs Wallabag articles and creates notes from them in various possible formats.
+This plugin fulfills a quite straightforward purpose; it syncs Wallabag articles and creates notes from them in various possible formats.
 
 Use the command "Sync Wallabag Articles" to sync new articles. Plugin will keep a track of items synced so if you delete a created note, it won't be generated again unless you use the command "Clear synced articles cache" to reset the plugin cache. There is also a "Delete note and remove it from synced articles cache" command to remove an individual note from both the file system and synced article cache. This is useful to fetch any changes you made to the note in Wallabag (such as tags and annotations).
 
